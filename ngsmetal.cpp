@@ -14,7 +14,7 @@ namespace ngsmetal
 {
 
   MTL::CommandQueue* commandQueue = nullptr;
-  extern MTL::Device* device = nullptr;
+  MTL::Device* device = nullptr;
   
   void InitNgsMetal()
   {
