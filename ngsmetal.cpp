@@ -1,12 +1,37 @@
+
+// 1. Generate implementations for metal-cpp headers in ONE C++ file
+#define NS_PRIVATE_IMPLEMENTATION
+#define MTL_PRIVATE_IMPLEMENTATION
+#define CA_PRIVATE_IMPLEMENTATION
+#include <Foundation/Foundation.hpp>
+#include <Metal/Metal.hpp>
+
+
 #include <comp.hpp>
+
 
 #include "ngsmetal.hpp"
 
 namespace ngsmetal
 {
 
+  MTL::CommandQueue* commandQueue = nullptr;
+  
   void InitNgsMetal()
   {
     cout << "InitNgsMetal" << endl;
+
+        // Top-level autorelease pool handles memory lifetime management
+    NS::AutoreleasePool* pool = NS::AutoreleasePool::alloc()->init();
+
+    // 2. Obtain default Metal device & Command Queue
+    MTL::Device* device = MTL::CreateSystemDefaultDevice();
+    if (!device) {
+        std::cerr << "Metal is not supported on this system.\n";
+        pool->release();
+        return;
+    }
+    
+    commandQueue = device->newCommandQueue();
   }
 }

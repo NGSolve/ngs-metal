@@ -35,6 +35,22 @@ add_library(${module_name} SHARED ${source_files})
 target_link_libraries(${module_name} PUBLIC ngsolve Python3::Module)
 set_target_properties(${module_name} PROPERTIES PREFIX "" CXX_STANDARD 17)
 
+# -----------------------------------------------------------------------------
+# Metal / Apple Framework Configuration
+# -----------------------------------------------------------------------------
+if(APPLE)
+  # Adds -I./metal-cpp
+  target_include_directories(${module_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/metal-cpp)
+
+  # Adds -framework Metal -framework Foundation -framework QuartzCore
+  target_link_libraries(${module_name} PRIVATE
+    "-framework Metal"
+    "-framework Foundation"
+    "-framework QuartzCore"
+  )
+endif()
+
+
 # Python does not recognize .dll (Windows) and .dylib (MacOS) file endings as modules
 if(WIN32)
   set_target_properties(${module_name} PROPERTIES SUFFIX ".pyd" )
